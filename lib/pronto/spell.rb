@@ -8,7 +8,7 @@ module Pronto
       @speller.suggestion_mode = 'fast'
     end
 
-    def run(patches, commit)
+    def run(patches, _)
       return [] unless patches
 
       patches.select { |patch| patch.additions > 0 }
