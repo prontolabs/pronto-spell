@@ -12,11 +12,23 @@ Gem::Specification.new do |s|
   s.homepage = 'http://github.org/mmozuras/pronto-spell'
   s.summary = 'Pronto runner that uses Aspell for spell checking'
 
-  s.required_rubygems_version = '>= 1.3.6'
-  s.license = 'MIT'
+  s.licenses = ['MIT']
+  s.required_ruby_version = '>= 1.9.3'
+  s.rubygems_version = '1.8.23'
 
-  s.files = Dir.glob('{lib}/**/*') + %w(LICENSE README.md)
-  s.test_files = `git ls-files -- {spec}/*`.split("\n")
+  s.files = `git ls-files`.split($RS).reject do |file|
+    file =~ %r{^(?:
+    spec/.*
+    |Gemfile
+    |Rakefile
+    |\.rspec
+    |\.gitignore
+    |\.rubocop.yml
+    |\.travis.yml
+    )$}x
+  end
+  s.test_files = []
+  s.extra_rdoc_files = ['LICENSE', 'README.md']
   s.require_paths = ['lib']
 
   s.add_dependency('pronto', '~> 0.5.0')
