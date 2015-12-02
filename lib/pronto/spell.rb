@@ -12,17 +12,17 @@ module Pronto
       return [] unless patches
 
       patches.select { |patch| patch.additions > 0 }
-             .map { |patch| inspect(patch) }
-             .flatten.compact
+        .map { |patch| inspect(patch) }
+        .flatten.compact
     end
 
     def inspect(patch)
       patch.added_lines.map do |line|
         words = line.content.scan(/[0-9a-zA-Z]+/)
         words.select { |word| word.length > 4 }
-             .uniq
-             .select { |word| !@speller.correct?(word) }
-             .map { |word| new_message(word, line) }
+          .uniq
+          .select { |word| !@speller.correct?(word) }
+          .map { |word| new_message(word, line) }
       end
     end
 
