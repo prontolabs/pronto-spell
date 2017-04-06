@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.author = 'Mindaugas Mozūras'
   s.email = 'mindaugas.mozuras@gmail.com'
-  s.homepage = 'http://github.org/mmozuras/pronto-spell'
+  s.homepage = 'https://github.com/mmozuras/pronto-spell'
   s.summary = 'Pronto runner that uses Aspell for spell checking'
 
   s.licenses = ['MIT']
