@@ -41,8 +41,7 @@ module Pronto
     def inspect(patch)
       patch.added_lines.map do |line|
         words = line.content.scan(/[0-9a-zA-Z]+/)
-        words.select { |word| (5..30).cover?(word.length) }
-          .uniq
+        words.uniq
           .select { |word| misspelled?(word) }
           .map { |word| new_message(word, line) }
       end
@@ -79,7 +78,8 @@ module Pronto
     end
 
     def misspelled?(word)
-      word !~ /\A\d+/ &&              # "1234", "1050px"
+      (5..30).cover?(word.length) &&
+        word !~ /\A\d+/ &&            # "1234", "1050px"
         !symbol_defined?(word) &&     # "strftime"
         !speller.correct?(word) &&
         !speller.correct?(word.sub(/(e?s|\d+)\z/, '')) &&
