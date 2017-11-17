@@ -78,13 +78,16 @@ module Pronto
     end
 
     def misspelled?(word)
-      (5..30).cover?(word.length) &&
-        word !~ /\A\d+/ &&            # "1234", "1050px"
-        !symbol_defined?(word) &&     # "strftime"
+      should_lint_word?(word) &&
+        !symbol_defined?(word) &&
         !speller.correct?(word) &&
         !speller.correct?(word.sub(/(e?s|\d+)\z/, '')) &&
-        !correct_camel_case?(word) && # "AppleOrange"
+        !correct_camel_case?(word) &&
         !whitelist.any? { |regexp| regexp =~ word }
+    end
+
+    def should_lint_word?(word)
+      (5..30).cover?(word.length) && word !~ /\d+/
     end
 
     def should_lint_file?(path)
