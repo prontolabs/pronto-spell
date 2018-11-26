@@ -4,34 +4,19 @@ require 'ffi/aspell'
 module Pronto
   class Spell < Runner
     CONFIG_FILE = '.pronto_spell.yml'.freeze
-    CONFIG_KEYS = %w(files_to_lint whitelist).freeze
 
-    def files_to_lint
-      @files_to_lint || /\.rb$/
-    end
-
-    def files_to_lint=(regexp)
-      @files_to_lint = regexpify(regexp)
-    end
-
-    def whitelist
-      @whitelist || []
-    end
-
-    def whitelist=(array)
-      @whitelist = array.map { |regexp| regexpify(regexp) }
+    def ignored_words
+      @ignored_words ||= begin
+        words = (spelling_config['ignored_words'] || []).map(&:downcase)
+        Set.new(words)
+      end
     end
 
     def run
       return [] if !@patches || @patches.count.zero?
 
-      read_config
-
-      @all_symbols = Symbol.all_symbols
-
       @patches
         .select { |patch| patch.additions > 0 }
-        .select { |patch| should_lint_file?(patch.new_file_full_path) }
         .map { |patch| inspect(patch) }
         .flatten.compact
     end
@@ -40,8 +25,10 @@ module Pronto
 
     def inspect(patch)
       patch.added_lines.map do |line|
-        words = line.content.scan(/[0-9a-zA-Z]+/)
-        words.uniq
+        words = line.content.scan(/([A-Z]{2,})|([A-Z]{0,1}[a-z]+)/)
+          .flatten.compact.uniq
+
+        words
           .select { |word| misspelled?(word) }
           .map { |word| new_message(word, line) }
       end
@@ -49,63 +36,54 @@ module Pronto
 
     def new_message(word, line)
       path = line.patch.delta.new_file[:path]
-      level = :info
+      level = :warning
 
       suggestions = speller.suggestions(word)
+
       msg = %("#{word}" might not be spelled correctly.)
-      msg << " Spelling suggestions: #{suggestions[0..2].join(', ')}" unless suggestions.empty?
+      unless suggestions.empty?
+        msg += " Spelling suggestions: #{suggestions[0..2].join(', ')}"
+      end
 
       Message.new(path, line, level, msg, nil, self.class)
     end
 
     def speller
-      @speller ||= begin
-        result = FFI::Aspell::Speller.new('en_US')
-        result.suggestion_mode = 'fast'
-        result
+      @speller ||= FFI::Aspell::Speller.new(
+        'en_US', :'sug-mode' => suggestion_mode
+      )
+    end
+
+    def spelling_config
+      @spelling_config ||= begin
+        config_path = File.join(repo_path, CONFIG_FILE)
+        File.exist?(config_path) ? YAML.load_file(config_path) : {}
       end
     end
 
-    def read_config
-      config_file = File.join(repo_path, CONFIG_FILE)
-      return unless File.exist?(config_file)
-      config = YAML.load_file(config_file)
+    def suggestion_mode
+      spelling_config['suggestion_mode'] || 'fast'
+    end
 
-      CONFIG_KEYS.each do |config_key|
-        next unless config[config_key]
-        send("#{config_key}=", config[config_key])
-      end
+    def min_word_length
+      spelling_config['min_word_length'] || 5
+    end
+
+    def max_word_length
+      spelling_config['max_word_length'] || Float::INFINITY
+    end
+
+    def max_suggestions_number
+      spelling_config['max_suggestions_number'] || 3
     end
 
     def misspelled?(word)
-      should_lint_word?(word) &&
-        !symbol_defined?(word) &&
-        !speller.correct?(word) &&
-        !speller.correct?(word.sub(/(e?s|\d+)\z/, '')) &&
-        !correct_camel_case?(word) &&
-        !whitelist.any? { |regexp| regexp =~ word }
+      lintable_word?(word) && !speller.correct?(word)
     end
 
-    def should_lint_word?(word)
-      (5..30).cover?(word.length) && word !~ /\d+/
-    end
-
-    def should_lint_file?(path)
-      files_to_lint =~ path.to_s
-    end
-
-    def correct_camel_case?(word)
-      word = word[0].capitalize + word[1..-1]
-      parts = word.scan(/[A-Z][a-z]+|[A-Z]+(?![a-z])/)
-      parts.size > 1 && parts.none? { |part| misspelled?(part) }
-    end
-
-    def regexpify(regexp)
-      regexp.is_a?(Regexp) ? regexp : Regexp.new(regexp, Regexp::IGNORECASE)
-    end
-
-    def symbol_defined?(symbol)
-      @all_symbols.include?(symbol.to_sym)
+    def lintable_word?(word)
+      (min_word_length..max_word_length).cover?(word.length) &&
+        !ignored_words.include?(word.downcase)
     end
   end
 end
