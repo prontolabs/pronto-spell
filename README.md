@@ -13,3 +13,30 @@ You'll need to install Aspell:
 
 * Arch Linux: `sudo pacman -S aspell`
 * OS X: (`brew install aspell --lang=en`)
+
+## Configuration
+
+In order to change configuration, you need to create `.pronto_spell.yaml` file in your project root directory. Awailable options are:
+
+```YAML
+suggestion_mode: 'fast' # default
+min_word_length: 5 # default
+max_word_length: 999 # default is Infinity
+max_suggestions_number: 3 # default
+ignored_words: # words in this list won't be marked as misspelled
+  - aspell
+  - boolean
+  - datetime
+```
+
+It's also handy to have `.pronto.yml`. Here is configuration, designed for rails project:
+```YAML
+spell:
+  exclude:
+    - 'yarn.lock'
+    - 'Gemfile.lock'
+    - 'Gemfile'
+    - 'package.json'
+    - '.*.yml'
+    - '*.json'
+```
