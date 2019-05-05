@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path('../lib', __dir__)
-require 'English'
+$LOAD_PATH.unshift File.expand_path('lib', __dir__)
 require 'pronto/spell/version'
+require 'English'
 
 Gem::Specification.new do |s|
   s.name = 'pronto-spell'
