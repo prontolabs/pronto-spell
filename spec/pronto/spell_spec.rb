@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 module Pronto
@@ -25,8 +27,11 @@ module Pronto
     let(:spelling_config) { {} }
 
     before do
-      allow(spell).to receive(:spelling_config).and_return(spelling_config)
-      allow(spell).to receive(:repo_path).and_return('/home/developer/projects/pronto-spell')
+      allow(spell).to receive(:spelling_config)
+        .and_return(spelling_config)
+
+      allow(spell).to receive(:repo_path)
+        .and_return('/home/developer/projects/pronto-spell')
     end
 
     describe '#run' do

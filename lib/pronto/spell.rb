@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'pronto'
 require 'ffi/aspell'
 
 module Pronto
   class Spell < Runner
-    CONFIG_FILE = '.pronto_spell.yml'.freeze
+    CONFIG_FILE = '.pronto_spell.yml'
 
     def ignored_words
       @ignored_words ||= begin
@@ -16,7 +18,7 @@ module Pronto
       return [] if !@patches || @patches.count.zero?
 
       @patches
-        .select { |patch| patch.additions > 0 }
+        .select { |patch| patch.additions.positive? }
         .map { |patch| inspect(patch) }
         .flatten.compact
     end
@@ -50,7 +52,7 @@ module Pronto
 
     def speller
       @speller ||= FFI::Aspell::Speller.new(
-        'en_US', :'sug-mode' => suggestion_mode
+        'en_US', 'sug-mode': suggestion_mode
       )
     end
 
