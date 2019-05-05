@@ -43,8 +43,9 @@ module Pronto
       suggestions = speller.suggestions(word)
 
       msg = %("#{word}" might not be spelled correctly.)
-      unless suggestions.empty?
-        msg += " Spelling suggestions: #{suggestions[0..2].join(', ')}"
+      if suggestions.any?
+        suggestions_text = suggestions[0..max_suggestions_number - 1].join(', ')
+        msg += " Spelling suggestions: #{suggestions_text}"
       end
 
       Message.new(path, line, level, msg, nil, self.class)
