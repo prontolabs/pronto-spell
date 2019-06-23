@@ -53,7 +53,7 @@ module Pronto
 
     def speller
       @speller ||= FFI::Aspell::Speller.new(
-        'en_US', 'sug-mode': suggestion_mode
+        language, 'sug-mode': suggestion_mode
       )
     end
 
@@ -62,6 +62,10 @@ module Pronto
         config_path = File.join(repo_path, CONFIG_FILE)
         File.exist?(config_path) ? YAML.load_file(config_path) : {}
       end
+    end
+
+    def language
+      spelling_config['language'] || 'en_US'
     end
 
     def suggestion_mode
