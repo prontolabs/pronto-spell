@@ -20,6 +20,7 @@ In order to change configuration, you need to create `.pronto_spell.yaml` file i
 
 ```YAML
 suggestion_mode: 'fast' # default
+language: 'en_US' # default
 min_word_length: 5 # default
 max_word_length: 999 # default is Infinity
 max_suggestions_number: 3 # default
