@@ -14,6 +14,13 @@ module Pronto
       end
     end
 
+    def keywords
+      @keywords ||= begin
+        words = (spelling_config['keywords'] || []).map(&:downcase)
+        Set.new(words)
+      end
+    end
+
     def run
       return [] if !@patches || @patches.count.zero?
 
@@ -27,6 +34,10 @@ module Pronto
 
     def inspect(patch)
       patch.added_lines.map do |line|
+        if keywords.to_a.any? && !%r{#{keywords.to_a.join('|')}}.match(line.content)
+          next
+        end
+
         words = line.content.scan(/([A-Z]{2,})|([A-Z]{0,1}[a-z]+)/)
           .flatten.compact.uniq
 

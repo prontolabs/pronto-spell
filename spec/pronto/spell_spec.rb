@@ -114,6 +114,34 @@ module Pronto
           expect(lint_messages).to be_empty
         end
       end
+
+      context 'with keywords in config' do
+        let(:spelling_config) do
+          { 'keywords' => ['context', 'it'] }
+        end
+
+        context 'when the patch content contains one of the keywords' do
+          let(:patch_content) { 'context "helllo the tsetir"' }
+
+            it 'returns the list of misspeled words' do
+              expect(lint_messages).to eq [
+                '"helllo" might not be spelled correctly. ' \
+                  'Spelling suggestions: hell lo, hell-lo, hello',
+
+                '"tsetir" might not be spelled correctly. ' \
+                  'Spelling suggestions: testier, tester, taster'
+              ]
+            end
+        end
+
+        context 'when the patch content does not contain any keywords' do
+          let(:patch_content) { 'helllo the tsetir' }
+
+          it 'does not complain about words included in personal dictionary' do
+            expect(lint_messages).to be_empty
+          end
+        end
+      end
     end
   end
 end
