@@ -5,7 +5,7 @@ require 'ffi/aspell'
 
 module Pronto
   class Spell < Runner
-    CONFIG_FILE = '.pronto_spell.yml'
+    CONFIG_FILE = '.pronto_spell.yaml'
 
     def ignored_words
       @ignored_words ||= begin
