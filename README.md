@@ -1,4 +1,4 @@
-# Pronto runner that uses Aspell for spell checking
+# Pronto Aspell runner
 
 [![Code Climate](https://codeclimate.com/github/prontolabs/pronto-spell.png)](https://codeclimate.com/github/prontolabs/pronto-spell)
 [![Build Status](https://travis-ci.org/prontolabs/pronto-spell.png)](https://travis-ci.org/prontolabs/pronto-spell)
