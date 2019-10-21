@@ -28,7 +28,7 @@ ignored_words: # words in this list won't be marked as misspelled
   - aspell
   - boolean
   - datetime
-keywords: # spell checker will run only if the diff contains a word in this list
+only_lines_matching: # spell checker will run only if the diff contains a word in this list
   - context
   - describe
 ```

@@ -117,7 +117,7 @@ module Pronto
 
       context 'with keywords in config' do
         let(:spelling_config) do
-          { 'keywords' => ['context', 'it'] }
+          { 'only_lines_matching' => ['context', 'it'] }
         end
 
         context 'when the patch content contains one of the keywords' do
