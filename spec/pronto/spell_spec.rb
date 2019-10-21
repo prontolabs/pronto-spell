@@ -137,7 +137,7 @@ module Pronto
         context 'when the patch content does not contain any keywords' do
           let(:patch_content) { 'helllo the tsetir' }
 
-          it 'does not complain about words included in personal dictionary' do
+          it 'does not complain' do
             expect(lint_messages).to be_empty
           end
         end
