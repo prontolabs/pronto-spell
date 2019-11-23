@@ -9,8 +9,13 @@ module Pronto
 
     def ignored_words
       @ignored_words ||= begin
-        words = (spelling_config['ignored_words'] || []).map(&:downcase)
-        Set.new(words)
+        Set.new(spelling_config['ignored_words'].to_a.map(&:downcase))
+      end
+    end
+
+    def keywords
+      @keywords ||= begin
+        Set.new(spelling_config['only_lines_matching'].to_a.map(&:downcase))
       end
     end
 
@@ -27,6 +32,10 @@ module Pronto
 
     def inspect(patch)
       patch.added_lines.map do |line|
+        if keywords.any? && !keywords_regexp.match(line.content)
+          next
+        end
+
         words = line.content.scan(/([A-Z]{2,})|([A-Z]{0,1}[a-z]+)/)
           .flatten.compact.uniq
 
@@ -62,6 +71,10 @@ module Pronto
         config_path = File.join(repo_path, CONFIG_FILE)
         File.exist?(config_path) ? YAML.load_file(config_path) : {}
       end
+    end
+
+    def keywords_regexp
+      @keywords_regexp ||= %r{#{keywords.to_a.join('|')}}
     end
 
     def language
