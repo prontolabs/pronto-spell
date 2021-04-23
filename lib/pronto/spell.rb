@@ -9,13 +9,13 @@ module Pronto
 
     def ignored_words
       @ignored_words ||= begin
-        Set.new(spelling_config['ignored_words'].to_a.map(&:downcase))
+        Set.new(spelling_config['ignored_words'].to_a.flatten.map(&:downcase))
       end
     end
 
     def keywords
       @keywords ||= begin
-        Set.new(spelling_config['only_lines_matching'].to_a.map(&:downcase))
+        Set.new(spelling_config['only_lines_matching'].to_a.flatten.map(&:downcase))
       end
     end
 
