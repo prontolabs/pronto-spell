@@ -50,10 +50,10 @@ module Pronto
       end
 
       context 'with misspelled words' do
-        it 'returns list of misspeled words' do
+        fit 'returns list of misspeled words' do
           expect(lint_messages).to eq [
             '"helllo" might not be spelled correctly. ' \
-              'Spelling suggestions: hell lo, hell-lo, hello',
+              "Spelling suggestions: hello, hell, he'll",
 
             '"woorld" might not be spelled correctly. ' \
               'Spelling suggestions: world, wold, whorled'
@@ -67,7 +67,7 @@ module Pronto
         it 'validates each word separately' do
           expect(lint_messages).to eq [
             '"Withh" might not be spelled correctly. ' \
-              'Spelling suggestions: With, Withe, Wither',
+              'Spelling suggestions: With, Withe, Witch',
 
             '"Wrrrong" might not be spelled correctly. ' \
               'Spelling suggestions: Wrong, Wrung, Wring'
@@ -81,10 +81,10 @@ module Pronto
         it 'validates each word separately' do
           expect(lint_messages).to eq [
             '"LOOOK" might not be spelled correctly. ' \
-              'Spelling suggestions: LOO OK, LOO-OK, LOOK',
+              'Spelling suggestions: LOOK, LOGO, LOCK',
 
             '"SHOWTING" might not be spelled correctly. ' \
-              'Spelling suggestions: SHOW TING, SHOW-TING, SHOOTING'
+              'Spelling suggestions: SHOWING, SHOOTING, SHORTING'
           ]
         end
       end
@@ -98,7 +98,7 @@ module Pronto
               'Spelling suggestions: cool, Colo, coil',
 
             '"skool" might not be spelled correctly. '\
-              'Spelling suggestions: skoal, school, skill'
+              'Spelling suggestions: skoal, spool, stool'
           ]
         end
       end
@@ -126,7 +126,7 @@ module Pronto
             it 'returns the list of misspeled words' do
               expect(lint_messages).to eq [
                 '"helllo" might not be spelled correctly. ' \
-                  'Spelling suggestions: hell lo, hell-lo, hello',
+                  "Spelling suggestions: hello, hell, he'll",
 
                 '"tsetir" might not be spelled correctly. ' \
                   'Spelling suggestions: testier, tester, taster'
