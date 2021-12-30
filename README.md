@@ -15,7 +15,7 @@ You'll need to install Aspell:
 
 ## Configuration
 
-In order to change configuration, you need to create `.pronto_spell.yaml` file in your project root directory. Awailable options are:
+In order to change configuration, you need to create `.pronto_spell.yml` file in your project root directory. Awailable options are:
 
 ```YAML
 suggestion_mode: 'fast' # default
