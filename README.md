@@ -1,9 +1,8 @@
 # Pronto runner that uses Aspell for spell checking
 
 [![Code Climate](https://codeclimate.com/github/prontolabs/pronto-spell.png)](https://codeclimate.com/github/prontolabs/pronto-spell)
-[![Build Status](https://travis-ci.org/prontolabs/pronto-spell.png)](https://travis-ci.org/prontolabs/pronto-spell)
+[![Build Status](https://github.com/prontolabs/pronto-spell/actions/workflows/checks.yml/badge.svg)](https://github.com/prontolabs/pronto-spell/actions/workflows/checks.yml)
 [![Gem Version](https://badge.fury.io/rb/pronto-spell.png)](http://badge.fury.io/rb/pronto-spell)
-[![Dependency Status](https://gemnasium.com/prontolabs/pronto-spell.png)](https://gemnasium.com/prontolabs/pronto-spell)
 
 Pronto runner that uses [Aspell](https://github.com/YorickPeterse/ffi-aspell) for spell checking. [What is Pronto?](https://github.com/prontolabs/pronto)
 
